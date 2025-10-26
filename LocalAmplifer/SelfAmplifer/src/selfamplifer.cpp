@@ -27,7 +27,7 @@ void SelfAmplifer::stop()
 
 QStringList SelfAmplifer::getChannelName()
 {
-    return {"FP1","FP2" };
+    return {"FP1","FP2", "stimulate" };
 }
 
 quint8 SelfAmplifer::getChannnelNum()
@@ -65,6 +65,35 @@ void SelfAmplifer::getLocalData(QString Dir) {
     connect_status = true;
 
 }
+//QList<QList<double> > SelfAmplifer::getChartData()
+//{
+//    //return eegdata.getChartData(32);
+//    QList<QList<double>> data;
+//    if (Raw_data.isEmpty()) {
+//        qDebug() << "nodata";
+//        return data;
+//    }
+//    //qDebug() << "bias1" << bias;
+//    int samplenum = Raw_data.first().size();
+//    //qDebug() << "samplenum"<<samplenum;
+//    for (int i = getpoint * bias; i < getpoint * bias + getpoint; i++)
+//    {
+//        if (samplenum < getpoint * bias + getpoint)
+//        {
+//            bias = 0;
+//            break;
+//        }
+//
+//        QList<double> selectchannelData;
+//        for (const auto& channelData : Raw_data) {
+//            selectchannelData.append(channelData[i]);
+//        }
+//        data.append(selectchannelData);
+//    }
+//    //    qDebug() << bias;
+//    incrementB();
+//    return data;
+//}
 QList<QList<double> > SelfAmplifer::getChartData()
 {
     //return eegdata.getChartData(32);
@@ -88,6 +117,7 @@ QList<QList<double> > SelfAmplifer::getChartData()
         for (const auto& channelData : Raw_data) {
             selectchannelData.append(channelData[i]);
         }
+        selectchannelData.append(0.0);  // 添加第三个通道的数据，全为0
         data.append(selectchannelData);
     }
     //    qDebug() << bias;
@@ -151,7 +181,7 @@ QList<uint8_t> SelfAmplifer::getEEGGameIndex()
 
 QList<uint8_t> SelfAmplifer::getEEGIndex()
 {
-    return {0,1};
+    return {0,1,2};
 }
 
 QList<uint8_t> SelfAmplifer::getEyeIndex()
@@ -201,7 +231,7 @@ void SelfAmplifer::init()
     matread = new MatRead;
     connect_status = false;
     initConnetWidget();
-    channel_num = 2;//初始化通道数
+    channel_num = 3;//初始化通道数
     status = false;//初始化采集器状态
     //channel_num=parse.getChannelNum();//初始化通道数
     //status=false;//初始化采集器状态
